@@ -1,0 +1,26 @@
+name = "secretchat"
+main = "src/worker.js"
+compatibility_date = "2025-01-01"
+
+# Static site and API on one free Worker. API and media always hit the script;
+# everything else is served from public/.
+[assets]
+directory = "public"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+html_handling = "auto-trailing-slash"
+run_worker_first = ["/api/*", "/media-api/*", "/media-files/*"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "secretchatdb"
+database_id = "62bb881c-6c1c-4537-a077-1f790752df72"
+
+# R2 is not enabled on this account. Encrypted files live in KV (free tier, 25 MB values).
+[[kv_namespaces]]
+binding = "MEDIA_KV"
+id = "989e24923ec24c3092a23e79ca2e63e6"
+
+[triggers]
+# Drop messages and files older than 24 hours.
+crons = ["0 0 * * *"]

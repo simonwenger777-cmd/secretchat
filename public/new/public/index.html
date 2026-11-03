@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
+    <meta name="theme-color" content="#060607">
+    <meta name="color-scheme" content="dark">
+    <meta name="referrer" content="no-referrer">
+    <title>S E C R E T</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ededed' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3C/svg%3E">
+    <link rel="preload" href="fonts/inter-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-layer" aria-hidden="true">
+        <div class="cipher-bg"></div>
+        <div class="ambient-light"></div>
+        <div class="noise-overlay"></div>
+    </div>
+
+    <div id="app" class="app-container">
+        <!-- Loader -->
+        <div id="loader" class="screen active" aria-live="polite">
+            <div class="terminal-loader">
+                <div class="loader-line"><span class="cursor"></span><span>&gt; INITIALIZING_SECURE_KERNEL</span></div>
+                <div class="loader-bar"><span></span></div>
+            </div>
+        </div>
+
+        <!-- Landing -->
+        <div id="landing" class="screen">
+            <div class="glass-panel">
+                <div class="shield-icon" aria-hidden="true">
+                    <span class="shield-ring"></span>
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                </div>
+                <h1>SYSTEM.<span class="highlight">SECURE</span></h1>
+                <p>Сквозное шифрование AES‑GCM 256. Ключ живёт только в ссылке — сервер видит лишь шифротекст.</p>
+                <ul class="feature-chips" aria-label="Возможности">
+                    <li>E2E</li><li>0 логов</li><li>RAM‑only</li>
+                </ul>
+                <button id="create-room" class="btn-primary" type="button">
+                    <span class="btn-text">INITIATE_HANDSHAKE</span>
+                    <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </button>
+                <span class="landing-hint">Создаст комнату и скопирует ссылку‑приглашение</span>
+            </div>
+        </div>
+
+        <!-- Chat -->
+        <div id="chat" class="screen">
+            <header class="glass-header">
+                <div class="header-info">
+                    <div class="status-indicator" aria-hidden="true"></div>
+                    <div class="header-titles">
+                        <h2>SECURE_LINK</h2>
+                        <button type="button" class="room-hash" id="room-hash-display" title="Скопировать ссылку-приглашение"></button>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button id="online-btn" class="online-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="online-panel" title="Кто онлайн">
+                        <span class="online-dots" id="online-dots"></span>
+                        <span id="online-count">0</span>
+                    </button>
+                    <div id="online-panel" class="glass-menu online-panel hidden" role="dialog" aria-label="Кто онлайн">
+                        <div class="online-title menu-title">онлайн</div>
+                        <div id="online-list"></div>
+                    </div>
+
+                    <button id="color-picker-btn" class="icon-btn" type="button" title="Настройки" aria-label="Настройки" aria-haspopup="true" aria-expanded="false" aria-controls="custom-color-menu">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>
+                    </button>
+                    <!-- Settings Menu -->
+                    <div id="custom-color-menu" class="glass-menu settings-menu hidden" role="dialog" aria-label="Настройки">
+                        <div class="menu-title">Цвет имени</div>
+                        <div class="color-swatches">
+                            <button type="button" class="color-swatch" style="--c:#fca5a5" data-color="#fca5a5" title="Pastel Red"></button>
+                            <button type="button" class="color-swatch" style="--c:#fdba74" data-color="#fdba74" title="Pastel Orange"></button>
+                            <button type="button" class="color-swatch" style="--c:#fde047" data-color="#fde047" title="Pastel Gold"></button>
+                            <button type="button" class="color-swatch" style="--c:#86efac" data-color="#86efac" title="Pastel Green"></button>
+                            <button type="button" class="color-swatch" style="--c:#5eead4" data-color="#5eead4" title="Pastel Mint"></button>
+                            <button type="button" class="color-swatch" style="--c:#67e8f9" data-color="#67e8f9" title="Pastel Cyan"></button>
+                            <button type="button" class="color-swatch" style="--c:#93c5fd" data-color="#93c5fd" title="Pastel Blue"></button>
+                            <button type="button" class="color-swatch" style="--c:#a5b4fc" data-color="#a5b4fc" title="Pastel Indigo"></button>
+                            <button type="button" class="color-swatch" style="--c:#c4b5fd" data-color="#c4b5fd" title="Pastel Violet"></button>
+                            <button type="button" class="color-swatch" style="--c:#d8b4e2" data-color="#d8b4e2" title="Dusty Orchid"></button>
+                        </div>
+                        <label class="hex-field">
+                            <span class="hex-preview" id="hex-preview"></span>
+                            <input type="text" id="hex-input" class="hex-input" placeholder="#HEXCODE" maxlength="7" spellcheck="false" autocomplete="off" aria-label="Свой цвет в HEX">
+                        </label>
+                        <div class="sound-settings">
+                            <div class="menu-title">Звук</div>
+                            <label class="sound-toggle">
+                                <span>Звуковые уведомления</span>
+                                <input type="checkbox" id="sound-toggle" class="switch">
+                            </label>
+                            <div class="menu-row">
+                                <button id="sound-pick" class="menu-action" type="button">Выбрать</button>
+                                <button id="sound-reset" class="menu-action" type="button">Сбросить</button>
+                            </div>
+                            <input type="file" id="sound-input" accept="audio/*" hidden>
+                        </div>
+                    </div>
+                    <button id="copy-link" class="icon-btn" type="button" title="Скопировать приглашение" aria-label="Скопировать приглашение">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    </button>
+                    <button id="leave-room" class="icon-btn" type="button" title="Отключиться" aria-label="Отключиться">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    </button>
+                </div>
+            </header>
+
+            <div class="chat-body" id="chat-body">
+                <main id="chat-messages" class="messages-container" aria-live="polite" aria-relevant="additions"></main>
+                <button id="scroll-down" class="scroll-down hidden" type="button" aria-label="К последним сообщениям">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+                    <span id="scroll-down-badge" class="scroll-down-badge hidden">0</span>
+                </button>
+                <div id="drop-overlay" class="drop-overlay hidden" aria-hidden="true">
+                    <div class="drop-card">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M20 16v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3"/></svg>
+                        <span>Отпустите, чтобы прикрепить</span>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="glass-footer">
+                <div id="selection-bar" class="hidden">
+                    <button id="cancel-selection" class="icon-btn" type="button" title="Отменить (Esc)" aria-label="Отменить выделение">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                    <span id="selection-count">Выбрано: 1</span>
+                    <div class="selection-actions">
+                        <button id="action-copy" class="icon-btn" type="button" title="Копировать" aria-label="Копировать">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        </button>
+                        <button id="action-edit" class="icon-btn hidden" type="button" title="Изменить" aria-label="Изменить">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+                        </button>
+                        <button id="action-reply" class="icon-btn hidden" type="button" title="Ответить" aria-label="Ответить">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 17 4 12 9 7"></polyline><path d="M20 18v-2a4 4 0 0 0-4-4H4"></path></svg>
+                        </button>
+                        <button id="action-delete" class="icon-btn danger-icon" type="button" title="Удалить" aria-label="Удалить">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path></svg>
+                            <span class="confirm-label">Удалить?</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="input-container" id="main-input-container">
+                    <button id="upload-btn" class="icon-btn" type="button" title="Прикрепить файл" aria-label="Прикрепить файл">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+                    </button>
+                    <input type="file" id="file-input" accept="image/*,video/*,audio/*" multiple hidden>
+
+                    <div class="input-stack">
+                        <div id="reply-preview" class="hidden">
+                            <svg class="reply-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 17 4 12 9 7"></polyline><path d="M20 18v-2a4 4 0 0 0-4-4H4"></path></svg>
+                            <div class="reply-content">
+                                <span id="reply-name"></span>
+                                <span id="reply-text"></span>
+                            </div>
+                            <button id="remove-reply" class="remove-btn" type="button" title="Отменить (Esc)" aria-label="Отменить">×</button>
+                        </div>
+                        <div id="attachment-preview" class="hidden">
+                            <img id="preview-img" src="" alt="Предпросмотр">
+                            <audio id="preview-audio" controls class="hidden"></audio>
+                            <div id="preview-file" class="hidden"></div>
+                            <button id="remove-preview" class="remove-btn" type="button" title="Убрать вложение" aria-label="Убрать вложение">×</button>
+                        </div>
+                        <div class="input-wrapper">
+                            <span class="prompt-symbol" aria-hidden="true">&gt;</span>
+                            <textarea id="message-input" placeholder="Сообщение…" rows="1" autocomplete="off" spellcheck="false" aria-label="Сообщение" enterkeyhint="send"></textarea>
+                            <div id="record-indicator" class="record-indicator hidden" aria-live="polite">
+                                <span class="rec-dot"></span><span id="record-time">0:00</span><span class="rec-hint">Запись · Esc — отмена</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="voice-btn" class="icon-btn" type="button" title="Голосовое сообщение" aria-label="Голосовое сообщение">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v1a7 7 0 0 1-14 0v-1"></path><path d="M12 18v4"></path><path d="M8 22h8"></path></svg>
+                    </button>
+                    <button id="send-btn" class="icon-btn primary-icon" type="button" title="Отправить" aria-label="Отправить">
+                        <svg class="send-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                        <span class="spinner" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="app.js" defer></script>
+</body>
+</html>

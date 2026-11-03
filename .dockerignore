@@ -1,0 +1,8 @@
+node_modules
+.git
+public/new
+src
+deploy
+*.md
+.env
+.env.*

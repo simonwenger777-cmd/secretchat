@@ -1,0 +1,12 @@
+exsslx.ru, www.exsslx.ru {
+	root * /var/www/secretchat
+	encode zstd gzip
+
+	@api path /api/*
+	reverse_proxy @api https://CHANGE_ME_WORKER_ORIGIN {
+		header_up Host {upstream_hostport}
+	}
+
+	try_files {path} /index.html
+	file_server
+}
